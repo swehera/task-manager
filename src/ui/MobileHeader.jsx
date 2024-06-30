@@ -72,10 +72,19 @@ const MobileHeader = () => {
             <Image src={logo} alt="logo" width={60} height={60} />
           </Link>
           <div>
-            <IoMenu
-              onClick={() => setIsOpen(!isOpen)}
-              className=" text-bgBlue text-4xl cursor-pointer"
-            />
+            {isOpen ? (
+              <p
+                onClick={() => setIsOpen(!isOpen)}
+                className=" text-grayTextColor text-4xl cursor-pointer"
+              >
+                X
+              </p>
+            ) : (
+              <IoMenu
+                onClick={() => setIsOpen(!isOpen)}
+                className=" text-bgBlue text-4xl cursor-pointer"
+              />
+            )}
           </div>
         </div>
 
