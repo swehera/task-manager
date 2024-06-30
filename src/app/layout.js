@@ -16,7 +16,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className=" bg-bgBlue min-h-screen">
-          <MobileHeader />
           <Layout>{children}</Layout>
         </div>
       </body>

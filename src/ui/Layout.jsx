@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import SideBar from "./SideBar";
 import Container from "./Container";
 import { PersistGate } from "redux-persist/integration/react";
+import MobileHeader from "./MobileHeader";
 
 const Layout = ({ children }) => {
   const pathname = usePathname();
@@ -25,6 +26,7 @@ const Layout = ({ children }) => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <CheckLayout>
+          {showSideBar && <MobileHeader />}
           <Container className="flex items-center md:gap-x-6">
             <div className={`${showSideBar ? "md:w-[18%]" : ""}`}>
               {showSideBar && <SideBar />}
