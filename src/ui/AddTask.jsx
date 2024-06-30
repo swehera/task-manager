@@ -84,10 +84,10 @@ const AddTask = () => {
   };
 
   return (
-    <div className="w-full min-h-[80vh] bg-green-500">
+    <div className="w-full min-h-[80vh] ">
       {loading ? (
-        <div>
-          <p>Task Adding...</p>
+        <div className=" flex items-center justify-center ">
+          <p className=" text-white text-xl font-semibold">Task Adding...</p>
         </div>
       ) : (
         <div className="flex flex-col gap-y-2">

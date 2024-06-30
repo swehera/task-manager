@@ -33,12 +33,12 @@ export const POST = async (request) => {
     const { category_name, user_id } = reqBody;
 
     const existingCategory = await Category.findOne({ category_name });
-    if (existingCategory) {
-      return NextResponse.json({
-        message: "Category already added",
-        existingCategory,
-      });
-    }
+    // if (existingCategory) {
+    //   return NextResponse.json({
+    //     message: "Category already added",
+    //     existingCategory,
+    //   });
+    // }
 
     const newCategory = new Category({
       category_name,

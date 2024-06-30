@@ -34,11 +34,11 @@ export const POST = async (request) => {
       );
     }
 
-    // const loggedData = {
-    //   id: user._id,
-    //   name: user.name,
-    //   email: user.email,
-    // };
+    const loggedData = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+    };
 
     return NextResponse.json({
       message: "Logged in successfully!",

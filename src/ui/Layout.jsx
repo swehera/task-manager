@@ -1,12 +1,13 @@
 "use client";
 
-import { store } from "@/redux/store";
+import { persistor, store } from "@/redux/store";
 import { Provider } from "react-redux";
 import CheckLayout from "./CheckLayout";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import SideBar from "./SideBar";
 import Container from "./Container";
+import { PersistGate } from "redux-persist/integration/react";
 
 const Layout = ({ children }) => {
   const pathname = usePathname();
@@ -18,17 +19,20 @@ const Layout = ({ children }) => {
     } else {
       setShowSideBar(true);
     }
-  }, [pathname, showSideBar]);
+  }, [pathname]);
+
   return (
     <Provider store={store}>
-      <CheckLayout>
-        <Container className=" flex items-center gap-x-6">
-          <div className={`${showSideBar && " w-[18%]"}`}>
-            {showSideBar && <SideBar />}
-          </div>
-          <div className=" w-full">{children}</div>
-        </Container>
-      </CheckLayout>
+      <PersistGate loading={null} persistor={persistor}>
+        <CheckLayout>
+          <Container className="flex items-center gap-x-6">
+            <div className={`${showSideBar ? "w-[18%]" : ""}`}>
+              {showSideBar && <SideBar />}
+            </div>
+            <div className="w-full">{children}</div>
+          </Container>
+        </CheckLayout>
+      </PersistGate>
     </Provider>
   );
 };

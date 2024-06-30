@@ -30,7 +30,7 @@ const Home = () => {
           <div className=" w-[30%] bg-grayColor rounded-md">
             <input
               type="text"
-              placeholder="Search Task"
+              placeholder="high, mid, low"
               className=" w-full rounded-md outline-none text-sm px-2 py-1 bg-grayColor"
             />
           </div>
