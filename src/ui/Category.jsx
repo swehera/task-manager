@@ -10,6 +10,7 @@ const Category = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const categoryData = useSelector((state) => state.category.category);
   const url = "https://task-manager-hera.vercel.app/api/category"; // Assuming your API endpoint is here
+  // const url = "http://localhost:3000/api/category"; // Assuming your API endpoint is here
   const [category_name, setCategory_Name] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();

@@ -16,12 +16,14 @@ const SideBar = () => {
   const [todo, setTodo] = useState(false);
   const [progress, setProgress] = useState(false);
   const [complete, setComplete] = useState(false);
+  const [category, setCategory] = useState(false);
 
   const HomeActive = () => {
     setHome(true);
     setTodo(false);
     setProgress(false);
     setComplete(false);
+    setCategory(false);
   };
 
   const TodoActive = () => {
@@ -29,6 +31,7 @@ const SideBar = () => {
     setTodo(true);
     setProgress(false);
     setComplete(false);
+    setCategory(false);
   };
 
   const ProgressActive = () => {
@@ -36,6 +39,7 @@ const SideBar = () => {
     setTodo(false);
     setProgress(true);
     setComplete(false);
+    setCategory(false);
   };
 
   const CompleteActive = () => {
@@ -43,6 +47,15 @@ const SideBar = () => {
     setTodo(false);
     setProgress(false);
     setComplete(true);
+    setCategory(false);
+  };
+
+  const CategoryActive = () => {
+    setHome(false);
+    setTodo(false);
+    setProgress(false);
+    setComplete(false);
+    setCategory(true);
   };
 
   return (
@@ -97,6 +110,17 @@ const SideBar = () => {
           } rounded-md py-0.5`}
         >
           Completed
+        </Link>
+        <Link
+          href={"/category"}
+          onClick={CategoryActive}
+          className={`w-full text-center ${
+            category || pathname === "/category"
+              ? "bg-yellowColor text-white"
+              : "text-grayTextColor bg-grayColor hover:bg-yellowColor hover:text-white duration-200"
+          } rounded-md py-0.5`}
+        >
+          Category
         </Link>
       </div>
 

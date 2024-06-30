@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveUser } from "@/redux/userSlice";
 
 const Login = () => {
-  const url = "https://task-manager-hera.vercel.app";
+  const url = "https://task-manager-hera.vercel.app"; //production time
+  // const url = "http://localhost:3000"; // development time
 
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
