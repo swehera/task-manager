@@ -59,7 +59,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className="w-full bg-white min-h-screen px-3 py-6 rounded-md relative">
+    <div className="w-full bg-white min-h-screen px-3 py-6 rounded-md relative hidden md:block">
       {/* logo section */}
       <Link href={"/"} className="flex items-center justify-center">
         <Image src={logo} alt="logo" width={100} height={100} />

@@ -41,7 +41,7 @@ const Home = () => {
       </div>
 
       {/* add task and show task section */}
-      <div className="grid grid-cols-4 gap-3 my-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-3">
         <Link
           href={"/add-task"}
           className="bg-white flex items-center justify-center rounded-md p-2 h-auto"
@@ -69,7 +69,9 @@ const Home = () => {
                 }`}
               >
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm font-semibold">Title: {item?.title}</p>
+                  <p className="text-sm font-semibold line-clamp-1">
+                    Title: {item?.title}
+                  </p>
                   <p className="text-sm line-clamp-2">{item?.description}</p>
                   <button className="w-full py-0.5 bg-white text-grayTextColor rounded-md text-sm">
                     {item?.status}

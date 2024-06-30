@@ -1,6 +1,8 @@
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import Layout from "@/ui/Layout";
+import MobileHeader from "@/ui/MobileHeader";
+import CheckLayout from "@/ui/CheckLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className=" bg-bgBlue min-h-screen">
+          <MobileHeader />
           <Layout>{children}</Layout>
         </div>
       </body>

@@ -25,8 +25,8 @@ const Layout = ({ children }) => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <CheckLayout>
-          <Container className="flex items-center gap-x-6">
-            <div className={`${showSideBar ? "w-[18%]" : ""}`}>
+          <Container className="flex items-center md:gap-x-6">
+            <div className={`${showSideBar ? "md:w-[18%]" : ""}`}>
               {showSideBar && <SideBar />}
             </div>
             <div className="w-full">{children}</div>

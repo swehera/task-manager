@@ -21,7 +21,7 @@ const Complete = () => {
           Completed Tasks
         </p>
       </div>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         {completedTasks.length === 0 ? (
           <p>No Completed Task</p>
         ) : (

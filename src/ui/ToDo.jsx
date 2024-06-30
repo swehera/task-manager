@@ -21,7 +21,7 @@ const ToDo = () => {
           Todo Tasks
         </p>
       </div>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         {todoTasks.length === 0 ? (
           <p>No Todo Tasks</p>
         ) : (

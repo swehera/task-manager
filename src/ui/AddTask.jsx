@@ -106,6 +106,12 @@ const AddTask = () => {
             </div>
           </div>
 
+          {/* mobile time category section */}
+          <div className="w-full block md:hidden">
+            <p className="text-white mt-1">Add new category</p>
+            <Category />
+          </div>
+
           {/* Task form */}
           <div className="w-full px-4 py-4 bg-white rounded-md flex flex-col gap-y-2">
             <div className="w-full rounded-md">
@@ -204,7 +210,7 @@ const AddTask = () => {
             </div>
           </div>
 
-          <div className="w-full">
+          <div className="w-full hidden md:block">
             <p className="text-white mt-1">Add new category</p>
             <Category />
           </div>
