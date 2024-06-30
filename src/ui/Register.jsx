@@ -8,7 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const Register = () => {
-  const url = "http://localhost:3000";
+  const url = "https://task-manager-hera.vercel.app";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

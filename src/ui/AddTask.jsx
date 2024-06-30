@@ -10,7 +10,7 @@ import { addAllTasks } from "@/redux/taskSlice";
 const AddTask = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const categoryData = useSelector((state) => state.category.category);
-  const url = "http://localhost:3000";
+  const url = "https://task-manager-hera.vercel.app";
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
