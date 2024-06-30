@@ -13,6 +13,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/typography": "^0.5.13",
     "bcryptjs": "^2.4.3",
+    "date-fns": "^3.6.0",
     "immer": "^10.1.1",
     "mongodb": "^6.8.0",
     "mongoose": "^8.4.4",

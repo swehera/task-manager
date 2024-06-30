@@ -60,8 +60,9 @@ const Home = () => {
                 : item.priority.toLowerCase().includes(search.toLowerCase());
             })
             .map((item) => (
-              <div
+              <Link
                 key={item?._id}
+                href={`/single-task/${item?._id}`}
                 className={`p-2 rounded-md ${
                   item?.status === "progress" && "bg-[#98C2FF]"
                 } ${item?.status === "completed" && "bg-[#84FF9F]"} ${
@@ -86,7 +87,7 @@ const Home = () => {
                     {item?.priority}
                   </button>
                 </div>
-              </div>
+              </Link>
             ))
         )}
       </div>
