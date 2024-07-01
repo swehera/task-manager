@@ -6,9 +6,11 @@ import Link from "next/link";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "../../utils/apiConfig";
 
 const Register = () => {
-  const url = "https://task-manager-hera.vercel.app";
+  const url = "http://localhost:3000"; //development time
+  // const url = "https://task-manager-hera.vercel.app"; //deployment time
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +24,7 @@ const Register = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(`${url}/api/registration`, {
+      const response = await fetch(`${API_BASE_URL}/api/registration`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 import { format, differenceInDays } from "date-fns";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { API_BASE_URL } from "../../utils/apiConfig";
 
 const SingleTaskInfo = () => {
   const { id } = useParams();
-  const url = "https://task-manager-hera.vercel.app"; // production time
-  //   const url = "http://localhost:3000"; // development time
+  // const url = "https://task-manager-hera.vercel.app"; // production time
+  const url = "http://localhost:3000"; // development time
 
   const [singleTaskInfo, setSingleTaskInfo] = useState({});
 
@@ -17,7 +18,7 @@ const SingleTaskInfo = () => {
     const getSingleTask = async () => {
       if (id) {
         try {
-          const response = await fetch(`${url}/api/tasks/${id}`);
+          const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`);
           const data = await response.json();
           console.log("data", data);
           setSingleTaskInfo(data);

@@ -7,13 +7,16 @@ import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { saveUser } from "@/redux/userSlice";
+import { addAllTasks } from "@/redux/taskSlice";
+import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "../../utils/apiConfig";
 
 const Login = () => {
-  const url = "https://task-manager-hera.vercel.app"; //production time
-  // const url = "http://localhost:3000"; // development time
+  const url = "http://localhost:3000"; // development time
 
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +26,7 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await fetch(`${url}/api/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -39,6 +42,19 @@ const Login = () => {
         toast.success(data?.message);
         console.log("Dispatching saveUser with:", data?.loggedData);
         dispatch(saveUser(data?.loggedData));
+
+        // Fetch user tasks
+        const tasksResponse = await fetch(`${url}/api/tasks`, {
+          headers: {
+            Authorization: `Bearer ${data?.loggedData.token}`,
+          },
+        });
+        const tasksData = await tasksResponse.json();
+        if (tasksData.success) {
+          dispatch(addAllTasks(tasksData.tasks));
+        }
+
+        router.push("/home");
       } else {
         toast.error(data?.error);
       }

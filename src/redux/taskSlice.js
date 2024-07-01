@@ -1,5 +1,3 @@
-// taskSlice.js (or similar file)
-
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -11,11 +9,11 @@ const taskSlice = createSlice({
   initialState,
   reducers: {
     addAllTasks: (state, action) => {
-      state.taskData.push(action.payload);
+      state.taskData = action.payload;
     },
-    // Add more reducers if needed
   },
 });
 
 export const { addAllTasks } = taskSlice.actions;
+
 export default taskSlice.reducer;

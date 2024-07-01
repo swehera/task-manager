@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { API_BASE_URL } from "../../utils/apiConfig";
 
 const Category = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const categoryData = useSelector((state) => state.category.category);
-  const url = "https://task-manager-hera.vercel.app/api/category"; // Assuming your API endpoint is here
-  // const url = "http://localhost:3000/api/category"; // Assuming your API endpoint is here
+  // const url = "https://task-manager-hera.vercel.app/api/category"; // Assuming your API endpoint is here
+  const url = `${API_BASE_URL}/api/category`; // Assuming your API endpoint is here
   const [category_name, setCategory_Name] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const Category = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category_name: category_name,
-          user_id: userInfo.id,
+          user_id: userInfo.user,
         }),
       });
       const categoryData = await response.json();

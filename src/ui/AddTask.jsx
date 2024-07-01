@@ -10,19 +10,17 @@ import { addAllTasks } from "@/redux/taskSlice";
 const AddTask = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const categoryData = useSelector((state) => state.category.category);
-  const url = "https://task-manager-hera.vercel.app"; //In Product Time
-  // const url = "http://localhost:3000"; //In Development Time
+  const url = "http://localhost:3000"; // Replace with your production URL
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState("low");
   const [status, setStatus] = useState("todo");
-  // const [status_name, setStatusName] = useState("ok");
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,6 +28,62 @@ const AddTask = () => {
       setSelectedCategory(categoryData[0]?.category_name || "");
     }
   }, [categoryData]);
+
+  // const handleAddTask = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!title || !description || !dueDate || !selectedCategory) {
+  //     toast.error("Please fill all the fields");
+  //     return;
+  //   }
+
+  //   const taskData = {
+  //     title,
+  //     description,
+  //     dueDate,
+  //     priority,
+  //     status,
+  //     category: selectedCategory,
+  //   };
+
+  //   console.log("Task Data to send:", taskData);
+
+  //   try {
+  //     setLoading(true);
+  //     const response = await fetch(`${url}/api/tasks`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${userInfo.token}`,
+  //       },
+  //       body: JSON.stringify(taskData),
+  //     });
+
+  //     const data = await response.json();
+
+  //     console.log("This is the tasks", data);
+
+  //     if (data.success) {
+  //       dispatch(addAllTasks([data.saveTask])); // Dispatch the new task as an array
+  //       toast.success(data.message);
+
+  //       setTitle("");
+  //       setDescription("");
+  //       setDueDate("");
+  //       setPriority("low");
+  //       setStatus("todo");
+  //       setSelectedCategory(categoryData[0]?.category_name || "");
+  //       router.push("/");
+  //     } else {
+  //       toast.error(data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding task:", error);
+  //     toast.error("An error occurred while adding task");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleAddTask = async (e) => {
     e.preventDefault();
@@ -40,38 +94,32 @@ const AddTask = () => {
       dueDate,
       priority,
       status,
-      // status_name,
       category: selectedCategory,
-      user: userInfo.id,
     };
-
-    console.log("Task Data to send:", taskData); // Debugging log
 
     try {
       setLoading(true);
-      const response = await fetch(`${url}/api/tasks`, {
+      const response = await fetch(`${API_BASE_URL}/api/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`, // Include the token in the Authorization header
         },
         body: JSON.stringify(taskData),
       });
 
       const data = await response.json();
 
-      console.log("This is the tasks", data);
-
       if (data.success) {
-        dispatch(addAllTasks(data.saveTask));
+        dispatch(addAllTasks([data.saveTask])); // Dispatch the new task as an array
         toast.success(data.message);
 
-        // Clear the form
         setTitle("");
         setDescription("");
         setDueDate("");
         setPriority("low");
         setStatus("todo");
-        setSelectedCategory("");
+        setSelectedCategory(categoryData[0]?.category_name || "");
         router.push("/");
       } else {
         toast.error(data.message);
@@ -85,14 +133,13 @@ const AddTask = () => {
   };
 
   return (
-    <div className="w-full min-h-[80vh] ">
+    <div className="w-full min-h-[80vh]">
       {loading ? (
-        <div className=" flex items-center justify-center ">
-          <p className=" text-white text-xl font-semibold">Task Adding...</p>
+        <div className="flex items-center justify-center">
+          <p className="text-white text-xl font-semibold">Task Adding...</p>
         </div>
       ) : (
         <div className="flex flex-col gap-y-2">
-          {/* User name and page info */}
           <div className="flex flex-col gap-y-2">
             <div>
               <p className="text-xl font-semibold text-white">
@@ -106,13 +153,11 @@ const AddTask = () => {
             </div>
           </div>
 
-          {/* mobile time category section */}
           <div className="w-full block md:hidden">
             <p className="text-white mt-1">Add new category</p>
             <Category />
           </div>
 
-          {/* Task form */}
           <div className="w-full px-4 py-4 bg-white rounded-md flex flex-col gap-y-2">
             <div className="w-full rounded-md">
               <p className="text-sm text-grayTextColor">Title</p>
@@ -143,7 +188,6 @@ const AddTask = () => {
               />
             </div>
 
-            {/* Category section */}
             <div className="w-full rounded-md">
               <p className="text-sm text-grayTextColor">Task Category</p>
               <select
@@ -175,18 +219,6 @@ const AddTask = () => {
                 <option value="high">High</option>
               </select>
             </div>
-            {/* <div className="w-full rounded-md">
-              <p className="text-sm text-grayTextColor">Status Name</p>
-              <select
-                value={status_name}
-                onChange={(e) => setStatusName(e.target.value)}
-                className="w-full bg-grayColor px-2 py-1 rounded-md outline-none"
-              >
-                <option value="ok">ok</option>
-                <option value="done">done</option>
-                <option value="finish">finish</option>
-              </select>
-            </div> */}
             <div className="w-full rounded-md">
               <p className="text-sm text-grayTextColor">Task Status</p>
               <select

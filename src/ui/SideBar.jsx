@@ -5,12 +5,13 @@ import { logo } from "../../public/images";
 import { useDispatch } from "react-redux";
 import { removeUser } from "@/redux/userSlice";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
 const SideBar = () => {
   const dispatch = useDispatch();
   const pathname = usePathname();
+  const router = useRouter();
 
   const [home, setHome] = useState(true);
   const [todo, setTodo] = useState(false);
@@ -56,6 +57,17 @@ const SideBar = () => {
     setProgress(false);
     setComplete(false);
     setCategory(true);
+  };
+
+  const handleLogout = () => {
+    // Clear the token from localStorage or cookies
+    localStorage.removeItem("token");
+
+    // Dispatch removeUser action to clear user data from the store
+    dispatch(removeUser());
+
+    // Redirect to login page
+    router.push("/login");
   };
 
   return (
@@ -127,7 +139,7 @@ const SideBar = () => {
       {/* logout section */}
       <div className="flex items-center justify-center">
         <button
-          onClick={() => dispatch(removeUser())}
+          onClick={handleLogout}
           className="bg-bgRedColor text-white w-[90%] py-0.5 rounded-md absolute bottom-16"
         >
           Log out

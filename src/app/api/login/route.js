@@ -1,6 +1,7 @@
 import { connect } from "@/db/db";
 import User from "@/models/userModel";
 import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
 export const POST = async (request) => {
@@ -8,21 +9,20 @@ export const POST = async (request) => {
   try {
     const reqBody = await request.json();
     const { email, password } = await reqBody;
+
     // User validation
     const user = await User.findOne({ email });
 
     if (!user) {
       return NextResponse.json(
         {
-          error: "User does not exists",
+          error: "User does not exist",
         },
         { status: 500 }
       );
     }
 
     // Password validation
-    console.log("user", user);
-
     const validPassword = await bcryptjs.compare(password, user.password);
 
     if (!validPassword) {
@@ -34,10 +34,18 @@ export const POST = async (request) => {
       );
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" } // Token expires in 1 hour
+    );
+
     const loggedData = {
-      id: user._id,
+      user: user._id,
       name: user.name,
       email: user.email,
+      token, // Include the token in the loggedData
     };
 
     return NextResponse.json({
