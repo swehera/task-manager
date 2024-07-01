@@ -6,6 +6,7 @@ import Category from "./Category";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { addAllTasks } from "@/redux/taskSlice";
+import { API_BASE_URL } from "../../utils/apiConfig";
 
 const AddTask = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
