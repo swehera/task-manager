@@ -33,7 +33,7 @@ export const GET = async (request, { params }) => {
   }
 };
 
-//update task api
+// Update task API
 export const PATCH = async (request, { params }) => {
   const { id } = params;
 
@@ -46,19 +46,48 @@ export const PATCH = async (request, { params }) => {
       { new: true, runValidators: true }
     );
 
-    //check
+    // Check
     if (!updatedTask) {
       return NextResponse.json({ message: "Task not found" }, { status: 404 });
     }
 
     return NextResponse.json({
-      message: "Updated succussfully",
+      message: "Updated successfully",
       updatedTask,
     });
   } catch (error) {
     console.error("Error updating task:", error);
     return NextResponse.json(
       { message: "Error updating task", error: error.message },
+      { status: 500 }
+    );
+  }
+};
+
+// Delete task API
+export const DELETE = async (request, { params }) => {
+  // Ensure the database connection is established
+  await connect();
+
+  // Get the id from the URL parameters
+  const { id } = params;
+
+  try {
+    // Delete the task from the database
+    const deletedTask = await Task.findByIdAndDelete(id);
+
+    if (!deletedTask) {
+      return NextResponse.json({ message: "Task not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      message: "Task deleted successfully",
+      deletedTask,
+    });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    return NextResponse.json(
+      { message: "Error deleting task", error: error.message },
       { status: 500 }
     );
   }

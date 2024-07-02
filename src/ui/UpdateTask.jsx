@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Category from "./Category";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { addAllTasks } from "@/redux/taskSlice";
+import { useRouter, useParams } from "next/navigation";
+import { updateTask } from "@/redux/taskSlice"; // Import the updateTask action
 import { API_BASE_URL } from "../../utils/apiConfig";
 
-const AddTask = () => {
+const UpdateTask = () => {
+  const { id } = useParams();
   const userInfo = useSelector((state) => state.user.userInfo);
   const categoryData = useSelector((state) => state.category.category);
   const url = "http://localhost:3000"; // Replace with your production URL
@@ -30,13 +31,43 @@ const AddTask = () => {
     }
   }, [categoryData]);
 
-  const handleAddTask = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        });
+        const data = await response.json();
 
-    if (!title || !description || !dueDate || !selectedCategory) {
-      toast.error("Please fill all the fields");
-      return;
+        if (response.ok) {
+          const task = data.task;
+          setTitle(task.title);
+          setDescription(task.description);
+          setDueDate(task.dueDate);
+          setPriority(task.priority);
+          setStatus(task.status);
+          setSelectedCategory(task.category);
+        } else {
+          toast.error(data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching task:", error);
+        toast.error("An error occurred while fetching task");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchTask();
     }
+  }, [id, userInfo.token]);
+
+  const handleUpdateTask = async (e) => {
+    e.preventDefault();
 
     const taskData = {
       title,
@@ -49,40 +80,27 @@ const AddTask = () => {
 
     try {
       setLoading(true);
-      if (userInfo?.token) {
-        const response = await fetch(`${API_BASE_URL}/api/tasks`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userInfo.token}`, // Include the token in the Authorization header
-          },
-          body: JSON.stringify(taskData),
-        });
+      const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`, // Include the token in the Authorization header
+        },
+        body: JSON.stringify(taskData),
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (data.success) {
-          dispatch(addAllTasks([data.saveTask])); // Dispatch the new task as an array
-          toast.success(data.message);
-
-          setTitle("");
-          setDescription("");
-          setDueDate("");
-          setPriority("low");
-          setStatus("todo");
-          setSelectedCategory(categoryData[0]?.category_name || "");
-          router.push("/");
-        } else {
-          toast.error(data.message);
-          console.log("data", data);
-        }
+      if (response.ok) {
+        dispatch(updateTask(data.updatedTask)); // Dispatch the updated task
+        toast.success(data.message);
+        router.push("/");
       } else {
-        // toast.error("User is not authenticated");
         toast.error(data.message);
       }
     } catch (error) {
-      console.error("Error adding task:", error);
-      toast.error(data.message);
+      console.error("Error updating task:", error);
+      toast.error("An error occurred while updating task");
     } finally {
       setLoading(false);
     }
@@ -92,7 +110,7 @@ const AddTask = () => {
     <div className="w-full min-h-[80vh]">
       {loading ? (
         <div className="flex items-center justify-center">
-          <p className="text-white text-xl font-semibold">Task Adding...</p>
+          <p className="text-white text-xl font-semibold">Updating Task...</p>
         </div>
       ) : (
         <div className="flex flex-col gap-y-2">
@@ -104,13 +122,13 @@ const AddTask = () => {
             </div>
             <div className="py-1 px-3 w-full rounded-md bg-white">
               <p className="text-sm font-semibold text-grayTextColor">
-                Add Task
+                Update Task
               </p>
             </div>
           </div>
 
           <div className="w-full block md:hidden">
-            <p className="text-white mt-1">Add new category</p>
+            <p className="text-white mt-1">Update category</p>
             <Category />
           </div>
 
@@ -189,17 +207,17 @@ const AddTask = () => {
             </div>
             <div>
               <button
-                onClick={handleAddTask}
+                onClick={handleUpdateTask}
                 className="text-sm px-4 py-0.5 bg-bgBlue text-white rounded-md"
                 disabled={loading}
               >
-                Add Task
+                Update Task
               </button>
             </div>
           </div>
 
           <div className="w-full hidden md:block">
-            <p className="text-white mt-1">Add new category</p>
+            <p className="text-white mt-1">Update category</p>
             <Category />
           </div>
         </div>
@@ -208,4 +226,4 @@ const AddTask = () => {
   );
 };
 
-export default AddTask;
+export default UpdateTask;

@@ -14,8 +14,6 @@ const Home = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      // const url = "http://localhost:3000"; // Replace with your production URL
-
       if (userInfo) {
         try {
           const response = await fetch(`${API_BASE_URL}/api/tasks`, {
@@ -45,6 +43,9 @@ const Home = () => {
       ? task
       : task.priority.toLowerCase().includes(search.toLowerCase());
   });
+
+  // Debugging: Log taskData to check for duplicate _id values
+  console.log("Task Data:", taskData);
 
   return (
     <div className="w-full min-h-[95vh]">
