@@ -59,27 +59,6 @@ export const POST = async (request) => {
 };
 
 // Fetching tasks for the logged-in user
-// export const GET = async (request) => {
-//   try {
-//     const authHeader = request.headers.get("Authorization");
-//     if (!authHeader) {
-//       return NextResponse.json(
-//         { message: "No token provided", success: false },
-//         { status: 401 }
-//       );
-//     }
-
-//     const token = authHeader.split(" ")[1];
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//     const userId = decoded.userId;
-
-//     const tasks = await Task.find({ user: userId });
-//     return NextResponse.json({ success: true, tasks });
-//   } catch (error) {
-//     return NextResponse.json({ success: false, message: error.message });
-//   }
-// };
-
 export const GET = async (request) => {
   try {
     const authHeader = request.headers.get("Authorization");

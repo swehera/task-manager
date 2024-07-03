@@ -14,7 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      if (userInfo) {
+      if (userInfo && userInfo.token) {
         try {
           const response = await fetch(`${API_BASE_URL}/api/tasks`, {
             headers: {
@@ -24,6 +24,8 @@ const Home = () => {
           const data = await response.json();
           if (data.success) {
             dispatch(addAllTasks(data.tasks));
+          } else {
+            console.error("Failed to fetch tasks:", data.message);
           }
         } catch (error) {
           console.error("Error fetching tasks:", error);
@@ -35,7 +37,7 @@ const Home = () => {
   }, [dispatch, userInfo]);
 
   const filteredTasks = userInfo
-    ? taskData.filter((task) => task && task.user === userInfo.user)
+    ? taskData.filter((task) => task.user === userInfo.user)
     : [];
 
   const searchFilteredTasks = filteredTasks.filter((task) => {
@@ -43,9 +45,6 @@ const Home = () => {
       ? task
       : task.priority.toLowerCase().includes(search.toLowerCase());
   });
-
-  // Debugging: Log taskData to check for duplicate _id values
-  console.log("Task Data:", taskData);
 
   return (
     <div className="w-full min-h-[95vh]">

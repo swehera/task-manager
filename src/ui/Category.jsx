@@ -1,31 +1,51 @@
 "use client";
 
-import { addCategory } from "@/redux/categorySlice";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { addCategory, setCategories } from "@/redux/categorySlice";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 import { API_BASE_URL } from "../../utils/apiConfig";
 
 const Category = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const categoryData = useSelector((state) => state.category.category);
-  // const url = "https://task-manager-hera.vercel.app/api/category"; // Assuming your API endpoint is here
-  const url = `${API_BASE_URL}/api/category`; // Assuming your API endpoint is here
+  const url = `${API_BASE_URL}/api/category`;
   const [category_name, setCategory_Name] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  console.log("check add category", categoryData);
+  useEffect(() => {
+    if (userInfo && userInfo.user) {
+      const fetchCategories = async () => {
+        try {
+          const response = await fetch(`${url}?user_id=${userInfo.user}`);
+          const data = await response.json();
+          if (data.success) {
+            dispatch(setCategories(data.categories));
+          } else {
+            toast.error(data.message || "Failed to fetch categories");
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+          toast.error("An error occurred while fetching categories");
+        }
+      };
+
+      fetchCategories();
+    }
+  }, [dispatch, userInfo]);
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
 
-    console.log("This is category component and check userInfo", userInfo);
+    if (!userInfo || !userInfo.user) {
+      toast.error("User information not available");
+      return;
+    }
 
     try {
       setLoading(true);
-      const response = await fetch(url, {
+      const response = await fetch(`${url}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -34,7 +54,6 @@ const Category = () => {
         }),
       });
       const categoryData = await response.json();
-      console.log("This data from backend", categoryData);
       if (categoryData.success) {
         toast.success(categoryData?.message);
         dispatch(addCategory(categoryData?.savedCategory));
@@ -45,7 +64,7 @@ const Category = () => {
         toast.error(categoryData?.error);
       }
     } catch (error) {
-      console.log({ error: error });
+      console.error({ error });
       toast.error("An error occurred while adding category");
     } finally {
       setLoading(false);
@@ -74,6 +93,14 @@ const Category = () => {
         </button>
       </div>
       <Toaster />
+      {/* <div>
+        <h2>Categories</h2>
+        <ul>
+          {categoryData.map((category) => (
+            <li key={category.id}>{category.category_name}</li>
+          ))}
+        </ul>
+      </div> */}
     </div>
   );
 };
