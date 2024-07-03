@@ -4,13 +4,14 @@ import React, { useState } from "react";
 import { logo } from "../../public/images";
 import { IoMenu } from "react-icons/io5";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { removeUser } from "@/redux/userSlice";
 
 const MobileHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   //for active section
   const [home, setHome] = useState(true);
@@ -18,6 +19,17 @@ const MobileHeader = () => {
   const [progress, setProgress] = useState(false);
   const [complete, setComplete] = useState(false);
   const [category, setCategory] = useState(false);
+
+  const handleLogout = () => {
+    // Clear the token from localStorage or cookies
+    localStorage.removeItem("token");
+
+    // Dispatch removeUser action to clear user data from the store
+    dispatch(removeUser());
+
+    // Redirect to login page
+    router.push("/login");
+  };
 
   const HomeActive = () => {
     setHome(true);
@@ -150,6 +162,12 @@ const MobileHeader = () => {
               >
                 Category
               </Link>
+              <div
+                onClick={handleLogout}
+                className="w-[50%] text-center bg-bgRedColor cursor-pointer text-white text-sm font-bold  py-1 rounded-md"
+              >
+                <p>Logout</p>
+              </div>
 
               {/* logout section */}
               {/* <div className=" bg-bgRedColor text-white w-[50%] flex items-center justify-center rounded-md text-sm py-0.5">

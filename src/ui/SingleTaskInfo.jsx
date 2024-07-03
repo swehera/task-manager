@@ -6,11 +6,12 @@ import { format, differenceInCalendarDays } from "date-fns";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { API_BASE_URL } from "../../utils/apiConfig";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteTask } from "@/redux/taskSlice";
 import Link from "next/link";
 
 const SingleTaskInfo = () => {
+  const userInfo = useSelector((state) => state.user.userInfo);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const url = "http://localhost:3000"; // development time
@@ -81,6 +82,23 @@ const SingleTaskInfo = () => {
   };
 
   // that is for delete the task
+  // const handleDelete = async () => {
+  //   try {
+  //     const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+  //       method: "DELETE",
+  //     });
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       console.log("Task deleted successfully", data);
+  //       dispatch(deleteTask(id));
+  //       router.push("/"); // Redirect to tasks list page
+  //     } else {
+  //       console.error("Error deleting task:", data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting task:", error);
+  //   }
+  // };
   const handleDelete = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
@@ -90,12 +108,33 @@ const SingleTaskInfo = () => {
       if (response.ok) {
         console.log("Task deleted successfully", data);
         dispatch(deleteTask(id));
+
         router.push("/"); // Redirect to tasks list page
       } else {
         console.error("Error deleting task:", data.message);
       }
     } catch (error) {
       console.error("Error deleting task:", error);
+    } finally {
+      await fetchTasks(); // Fetch the latest tasks after deletion
+    }
+  };
+
+  const fetchTasks = async () => {
+    if (userInfo) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/tasks`, {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          dispatch(addAllTasks(data.tasks));
+        }
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
     }
   };
 
