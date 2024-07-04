@@ -27,8 +27,10 @@ const Layout = ({ children }) => {
       <PersistGate loading={null} persistor={persistor}>
         <CheckLayout>
           {showSideBar && <MobileHeader />}
-          <Container className="flex items-center md:gap-x-6">
-            <div className={`${showSideBar ? "md:w-[18%]" : ""}`}>
+          <Container className="flex items-center  md:gap-x-6">
+            <div
+              className={`${showSideBar ? "md:w-[18%]  md:m-5" : " w-0 m-0"}`}
+            >
               {showSideBar && <SideBar />}
             </div>
             <div className="w-full">{children}</div>

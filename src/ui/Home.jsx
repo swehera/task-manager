@@ -47,7 +47,7 @@ const Home = () => {
   });
 
   return (
-    <div className="w-full min-h-[95vh]">
+    <div className="w-full min-h-[95vh] overflow-auto ">
       <div className="flex flex-col gap-y-2">
         <div>
           <p className="text-xl font-semibold text-white">

@@ -1,9 +1,42 @@
 "use client";
 
-import { useSelector } from "react-redux";
+import { setCategories } from "@/redux/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { API_BASE_URL } from "../../utils/apiConfig";
+import { useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const AllCategory = () => {
+  const userInfo = useSelector((state) => state.user.userInfo);
   const categoryData = useSelector((state) => state.category.category);
+  const url = `${API_BASE_URL}/api/category`;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userInfo && userInfo.user) {
+      const fetchCategories = async () => {
+        try {
+          const response = await fetch(`${url}?user_id=${userInfo.user}`);
+          const data = await response.json();
+          if (data.success) {
+            dispatch(setCategories(data.categories));
+          } else {
+            toast.error(data.message || "Failed to fetch categories");
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+          toast.error("An error occurred while fetching categories");
+        }
+      };
+
+      fetchCategories();
+    }
+  }, [dispatch, userInfo]);
+
+  console.log("categoryData", categoryData);
+  console.log("userInfo", userInfo);
+
   return (
     <div className="w-full min-h-screen flex flex-col gap-2">
       <div className="py-1 px-3 w-full rounded-md bg-white">
@@ -35,6 +68,7 @@ const AllCategory = () => {
           ))
         )}
       </div>
+      <Toaster />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -26,8 +27,9 @@ const Complete = () => {
           <p>No Completed Task</p>
         ) : (
           completedTasks.map((item) => (
-            <div
+            <Link
               key={item?._id}
+              href={`/single-task/${item?._id}`}
               className={`p-2 rounded-md ${
                 item.status === "progress" && "bg-[#98C2FF]"
               } ${item.status === "completed" && "bg-[#84FF9F]"} ${
@@ -50,7 +52,7 @@ const Complete = () => {
                   {item?.priority}
                 </button>
               </div>
-            </div>
+            </Link>
           ))
         )}
       </div>
